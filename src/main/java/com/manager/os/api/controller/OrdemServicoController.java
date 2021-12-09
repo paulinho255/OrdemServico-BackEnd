@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -45,18 +46,20 @@ public class OrdemServicoController {
 		return ResponseEntity.ok().body(os);
 	}
 	/*
-	 * curl -i -X POST -H "Content-Type: application/json" -d "curl -i -X POST -H "Content-Type: application/json" -d "{
-    \"prioridade\": 1,
-     \"observacoes\": \"Reparação do piso externo.\",
-    \"status\": 1,
-    \"tecnico\": 3,
-    \"cliente\": 6
-  }" http://localhost:8080/os
+	 * curl -i -X POST -H "Content-Type: application/json" -d "{\"prioridade\": 1,\"observacoes\": \"Reparação do piso externo.\",\"status\": 1,\"tecnico\": 3,\"cliente\": 6}" http://localhost:8080/os
 	 * */
 	@PostMapping
 	public ResponseEntity<OrdemServicoDTO> create(@Valid @RequestBody OrdemServicoDTO obj){
 		obj = new OrdemServicoDTO(service.create(obj));
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(obj.getId()).toUri();
 		return ResponseEntity.created(uri).build();
+	}
+	/*
+	 * curl -i -X PUT -H "Content-Type: application/json" -d "@OS.json" http://localhost:8080/os
+	 * */
+	@PutMapping
+	public ResponseEntity<OrdemServicoDTO> update(@Valid @RequestBody OrdemServicoDTO obj){
+		obj = new OrdemServicoDTO(service.update(obj));
+		return ResponseEntity.ok().body(obj);
 	}
 }

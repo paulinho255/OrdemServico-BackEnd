@@ -1,5 +1,6 @@
 package com.manager.os.api.services;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -38,6 +39,11 @@ public class OrdemServicoService {
 		return saveOS(obj);
 	}
 	
+	public OrdemServico update(OrdemServicoDTO obj) {
+		findById(obj.getId());
+		return saveOS(obj);
+	}
+	
 	private OrdemServico saveOS(OrdemServicoDTO obj) {
 		OrdemServico os = new OrdemServico();
 		
@@ -51,6 +57,11 @@ public class OrdemServicoService {
 		
 		os.setTecnico(tecnico);
 		os.setCliente(cliente);
+		
+		if (os.getStatus().getCod().equals(2)) {
+			os.setDataFechamento(LocalDateTime.now());
+		}
 		return repository.save(os);
 	}
+
 }
